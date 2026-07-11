@@ -1,4 +1,7 @@
 package hazzard_chess.model.piece;
+import java.util.List;
+
+import hazzard_chess.model.Board;
 
 public abstract class Piece {
     private String color;
@@ -16,4 +19,6 @@ public abstract class Piece {
         public int getCol() {return col;}
 
         public abstract char getSymbol();
+
+    public abstract List<int[]> getValidMoves(Board board);
 }
