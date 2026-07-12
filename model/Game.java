@@ -17,7 +17,7 @@ public class Game {
         Piece piece = fromSquare.getPiece();
 
         if(piece == null){
-            System.out.println("Starting square does not contain a piece.");
+            System.out.println("Square does not contain a piece.");
             return false;
         }
 
