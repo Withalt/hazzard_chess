@@ -51,6 +51,7 @@ public class Game {
         Square toSquare = board.getSquare(toRow, toCol);
         toSquare.setPiece(piece);
         fromSquare.setPiece(null);
+        board.reveal(toRow, toCol);
 
         currentTurn = currentTurn.equals("white") ? "black" : "white";
         return true;

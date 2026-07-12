@@ -18,6 +18,7 @@ public class Board {
         initializeSquares();
         placePieces();
         placeMines();
+        caculateAdjacentMines();
     }
 
     private void initializeSquares(){
@@ -95,11 +96,13 @@ public class Board {
     //     }
     // }
 
+    //Debug View
     public void printSideBySide(){
-        System.out.println("Chess View                  Mine View");
+        System.out.println("Chess View            Minesweeper View");
         for (int row=0; row<SIZE; row++){
             StringBuilder line = new StringBuilder();
 
+            //Chess view
             for(int col=0; col<SIZE; col++){
                 Square sq = squares[row][col];
                 line.append(sq.isEmpty() ? ". " : sq.getPiece().getSymbol() + " ");
@@ -107,12 +110,67 @@ public class Board {
 
             line.append("       ");
 
+            //Minesweeper view
             for(int col=0; col<SIZE; col++){
                 Square sq = squares[row][col];
-                line.append(sq.hasMine() ? "* " : ". ");
+                if(!sq.isRevealed()){
+                    line.append("? ");
+                }else if(sq.hasMine()){
+                    line.append("* ");
+                }else{
+                    line.append(sq.getAdjacentMines() + " ");
+                }
             }
             System.out.println(line.toString());
         }
     }
 
+    private void caculateAdjacentMines(){
+        int[][] directions={
+            {-1,-1}, {-1,0}, {-1,1},
+            {0,-1},         {0,1},
+            {1,-1}, {1,0}, {1,1}
+        };
+
+        for(int row=0; row<SIZE; row++){
+            for(int col=0; col<SIZE; col++){
+                int count = 0;
+                for(int[] dir : directions){
+                    int r = row + dir[0];
+                    int c = col + dir[1];
+                    
+                    if(r>=0 && r<SIZE && c>=0 && c<SIZE){
+                        if(squares[r][c].hasMine()){
+                            count++;
+                        }
+                    }
+                }
+                squares[row][col].setAdjacentMines(count);
+            }
+        }
+    }
+
+    public void reveal(int row, int col){
+        Square square = squares[row][col];
+        if(square.isRevealed()){
+            return;
+        }
+        square.reveal();
+        if(square.getAdjacentMines() == 0){
+            int[][] directions={
+            {-1,-1}, {-1,0}, {-1,1},
+            {0,-1},         {0,1},
+            {1,-1}, {1,0}, {1,1}
+            };
+
+            for(int[] dir : directions){
+                int r = row + dir[0];
+                int c = col + dir[1];
+
+                if(r>=0 && r<SIZE && c>=0 && c<SIZE){
+                    reveal(r, c);
+                }
+            }
+        }
+    }
 }
