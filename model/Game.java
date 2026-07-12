@@ -49,6 +49,12 @@ public class Game {
         }
 
         Square toSquare = board.getSquare(toRow, toCol);
+        
+        if(toSquare.isFlagged()){
+            System.out.println("Cannot move to an enemy square that contains a flag.");
+            return false;
+        }
+        
         toSquare.setPiece(piece);
         fromSquare.setPiece(null);
         board.reveal(toRow, toCol);

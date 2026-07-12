@@ -114,7 +114,7 @@ public class Board {
             for(int col=0; col<SIZE; col++){
                 Square sq = squares[row][col];
                 if(!sq.isRevealed()){
-                    line.append("? ");
+                    line.append(sq.isFlagged() ? "F " : "? ");
                 }else if(sq.hasMine()){
                     line.append("* ");
                 }else{
@@ -172,5 +172,16 @@ public class Board {
                 }
             }
         }
+    }
+
+    public boolean toggleFlag(int row, int col){
+        Square square = squares[row][col];
+        if(square.isRevealed()){
+            System.out.println("Cannot flag a revealed square");
+            return false;
+        }
+
+        square.setFlagged(!square.isFlagged());
+        return true;
     }
 }

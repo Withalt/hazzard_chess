@@ -9,6 +9,7 @@ public class Square {
     private boolean hasMine;
     private boolean isRevealed;
     private int adjacentMines;
+    private boolean isFlagged;
 
     private Piece piece;
     
@@ -32,6 +33,9 @@ public class Square {
 
     public int getAdjacentMines() {return adjacentMines;}
     public void setAdjacentMines(int count) {this.adjacentMines = count;}
+
+    public boolean isFlagged() {return isFlagged;}
+    public void setFlagged(boolean flagged) {this.isFlagged = flagged;}
 
     public Piece getPiece() {return piece;}
     public void setPiece(Piece piece) {this.piece = piece;}
