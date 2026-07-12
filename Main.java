@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
         Board board = new Board();
         Game game = new Game(board);
-        board.printBoard();
+        board.printSideBySide();
 
         Scanner scanner = new Scanner(System.in);
         while(true){
@@ -17,7 +17,7 @@ public class Main {
             System.out.print("Enter move (fromRow fromCol toRow toCol): ");
             int fr = scanner.nextInt(), fc = scanner.nextInt(), tr = scanner.nextInt(), tc = scanner.nextInt();
             game.movePiece(fr, fc, tr, tc);
-            board.printBoard();
+            board.printSideBySide();
         }
     }
 }
