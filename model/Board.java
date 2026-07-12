@@ -1,5 +1,7 @@
 package hazzard_chess.model;
 
+import java.util.Random;
+
 import hazzard_chess.model.piece.Bishop;
 import hazzard_chess.model.piece.King;
 import hazzard_chess.model.piece.Knight;
@@ -15,6 +17,7 @@ public class Board {
         squares = new Square[SIZE][SIZE];
         initializeSquares();
         placePieces();
+        placeMines();
     }
 
     private void initializeSquares(){
@@ -50,17 +53,66 @@ public class Board {
         squares[row][7].setPiece(new Rook(color, row, 7));
     }
 
-    public void printBoard(){
-        for (int row = 0; row < SIZE; row++){
-            for (int col = 0; col < SIZE; col++){
-                Square sq = squares[row][col];
-                if (sq.isEmpty()){
-                    System.out.print(". ");
-                }else{
-                    System.out.print(sq.getPiece().getSymbol() + " ");
-                }
+    // public void printBoard(){
+    //     for (int row = 0; row < SIZE; row++){
+    //         for (int col = 0; col < SIZE; col++){
+    //             Square sq = squares[row][col];
+    //             if (sq.isEmpty()){
+    //                 System.out.print(". ");
+    //             }else{
+    //                 System.out.print(sq.getPiece().getSymbol() + " ");
+    //             }
+    //         }
+    //         System.out.println();
+    //     }
+    // }
+
+    public static final int MINE_COUNT = 10;
+
+    private void placeMines(){
+        Random rand = new Random();
+        int minesPlaced = 0;
+        while (minesPlaced < MINE_COUNT){
+            int row = rand.nextInt(SIZE);
+            int col = rand.nextInt(SIZE);
+
+            Square square = squares[row][col];
+
+            if(!square.hasMine()){
+                square.setMine(true);
+                minesPlaced++;
             }
-            System.out.println();
         }
     }
+
+    // public void printMineDebugView(){
+    //     for(int row=0; row<SIZE; row++){
+    //         for(int col = 0; col<SIZE; col++){
+    //             Square sq = squares[row][col];
+    //             System.out.print(sq.hasMine() ? "* " : ". ");
+    //         }
+    //         System.out.println();
+    //     }
+    // }
+
+    public void printSideBySide(){
+        System.out.println("Chess View                  Mine View");
+        for (int row=0; row<SIZE; row++){
+            StringBuilder line = new StringBuilder();
+
+            for(int col=0; col<SIZE; col++){
+                Square sq = squares[row][col];
+                line.append(sq.isEmpty() ? ". " : sq.getPiece().getSymbol() + " ");
+            }
+
+            line.append("       ");
+
+            for(int col=0; col<SIZE; col++){
+                Square sq = squares[row][col];
+                line.append(sq.hasMine() ? "* " : ". ");
+            }
+            System.out.println(line.toString());
+        }
+    }
+
 }
