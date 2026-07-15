@@ -8,6 +8,15 @@ import hazzard_chess.model.Game;
 public class Main {
     public static void main(String[] args) {
         Board board = new Board();
+
+        // Debug White King
+        // boolean isInCheck = board.isSquareUnderAttack(7, 4, "black");
+        // System.out.println("White king in check: " + isInCheck);
+        // King whiteKing = board.findKing("white");
+        // boolean isInCheck = board.isSquareUnderAttack(whiteKing.getRow(), whiteKing.getCol(), "black");
+        boolean isInCheck = board.isKingInCheck("white");
+        System.out.println("White king in check: " + isInCheck);
+
         Game game = new Game(board);
         board.printSideBySide();
 

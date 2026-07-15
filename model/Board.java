@@ -1,5 +1,7 @@
 package hazzard_chess.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import hazzard_chess.model.piece.Bishop;
@@ -8,6 +10,7 @@ import hazzard_chess.model.piece.Knight;
 import hazzard_chess.model.piece.Pawn;
 import hazzard_chess.model.piece.Queen;
 import hazzard_chess.model.piece.Rook;
+import hazzard_chess.model.piece.Piece;
 
 public class Board {
     public static final int SIZE = 8;
@@ -183,5 +186,50 @@ public class Board {
 
         square.setFlagged(!square.isFlagged());
         return true;
+    }
+
+    public List<Piece> getAllPieces(String color){
+        List<Piece> pieces = new ArrayList<>();
+
+        for(int row=0; row<SIZE; row++){
+            for(int col=0; col<SIZE; col++){
+                Square square = squares[row][col];
+                if(!square.isEmpty() && square.getPiece().getColor().equals(color)){
+                    pieces.add(square.getPiece());
+                }
+            }
+        }
+        return pieces;
+    }
+
+    public boolean isSquareUnderAttack(int row, int col, String byColor){
+        List<Piece> attackers = getAllPieces(byColor);
+
+        for(Piece piece : attackers){
+            List<int[]> moves = piece.getValidMoves(this);
+            for(int[] move : moves){
+                if(move[0] == row && move[1] == col){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public King findKing(String color){
+        List<Piece> pieces = getAllPieces(color);
+
+        for(Piece piece : pieces){
+            if(piece instanceof King){
+                return(King) piece;
+            }
+        }
+        return null;
+    }
+
+    public boolean isKingInCheck(String color){
+        King king = findKing(color);
+        String opponentColor = color.equals("white") ? "black" : "white";
+        return isSquareUnderAttack(king.getRow(), king.getCol(), opponentColor);
     }
 }
