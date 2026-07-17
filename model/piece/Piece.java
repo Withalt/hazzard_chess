@@ -7,6 +7,7 @@ public abstract class Piece {
     private String color;
     private int row;
     private int col;
+    private boolean hasMoved = false;
 
     public Piece(String color, int row, int col){
         this.color = color;
@@ -21,4 +22,11 @@ public abstract class Piece {
         public abstract char getSymbol();
 
     public abstract List<int[]> getValidMoves(Board board);
+
+    public boolean getHasMoved(){return hasMoved;}
+    public void setHasMoved(boolean hasmoved){this.hasMoved = hasmoved;}
+    public void setPosition(int row, int col){
+        this.row = row;
+        this.col = col;
+    }
 }

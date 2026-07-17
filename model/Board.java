@@ -49,7 +49,7 @@ public class Board {
     private void placeBackRow(int row, String color){
         squares[row][0].setPiece(new Rook(color, row, 0));
         squares[row][1].setPiece(new Knight(color, row, 1));
-        squares[row][2].setPiece(new Bishop(color, row, 3));
+        squares[row][2].setPiece(new Bishop(color, row, 2));
         squares[row][3].setPiece(new Queen(color, row, 3));
         squares[row][4].setPiece(new King(color, row, 4));
         squares[row][5].setPiece(new Bishop(color, row, 5));
@@ -101,9 +101,19 @@ public class Board {
 
     //Debug View
     public void printSideBySide(){
-        System.out.println("Chess View            Minesweeper View");
+        System.out.println("  Chess View            Minesweeper View");
+        
+        //Col Number
+        System.out.print("  ");
+        for(int col=0; col<SIZE; col++){
+            System.out.print(col + " ");
+        }
+        System.out.println();
+        
         for (int row=0; row<SIZE; row++){
             StringBuilder line = new StringBuilder();
+            //Row Number
+            line.append(row + " ");
 
             //Chess view
             for(int col=0; col<SIZE; col++){
@@ -231,5 +241,43 @@ public class Board {
         King king = findKing(color);
         String opponentColor = color.equals("white") ? "black" : "white";
         return isSquareUnderAttack(king.getRow(), king.getCol(), opponentColor);
+    }
+
+    public boolean canCastleKingside(String color){
+        King king = findKing(color);
+        int row = king.getRow();
+        String opponentColor = color.equals("white") ? "black" : "white";
+        Square rookSquare = squares[row][7];
+        if(rookSquare.isEmpty() || !(rookSquare.getPiece() instanceof Rook)){
+            return false;
+        }
+        Piece rook = rookSquare.getPiece();
+
+        boolean neitherMoved = !king.getHasMoved() && !rook.getHasMoved();
+        boolean pathClear = squares[row][5].isEmpty() && squares[row][6].isEmpty();
+        boolean pathSafe = !isSquareUnderAttack(row, 4, opponentColor)
+                        && !isSquareUnderAttack(row, 5, opponentColor)
+                        && !isSquareUnderAttack(row, 6, opponentColor);
+
+        return neitherMoved && pathClear && pathSafe;
+    }
+
+    public boolean canCastleQueenside(String color){
+        King king = findKing(color);
+        int row = king.getRow();
+        String opponentColor = color.equals("white") ? "black" : "white";
+        Square rookSquare = squares[row][0];
+        if(rookSquare.isEmpty() || !(rookSquare.getPiece() instanceof Rook)){
+            return false;
+        }
+        Piece rook = rookSquare.getPiece();
+
+        boolean neitherMoved = !king.getHasMoved() && !rook.getHasMoved();
+        boolean pathClear = squares[row][1].isEmpty() && squares[row][2].isEmpty() && squares[row][3].isEmpty();
+        boolean pathSafe = !isSquareUnderAttack(row, 4, opponentColor)
+                        && !isSquareUnderAttack(row, 3, opponentColor)
+                        && !isSquareUnderAttack(row, 2, opponentColor);
+
+        return neitherMoved && pathClear && pathSafe;
     }
 }
