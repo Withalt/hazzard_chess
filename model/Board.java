@@ -280,4 +280,56 @@ public class Board {
 
         return neitherMoved && pathClear && pathSafe;
     }
+
+    public void tryChording(int row, int col){
+        Square center = squares[row][col];
+        if(!center.isRevealed() || center.getAdjacentMines() == 0){
+            return;
+        }
+
+        int[][] directions = {
+            {-1,-1}, {-1,0}, {-1,1},
+            {0,-1},         {0,1},
+            {1,-1}, {1,0}, {1,1}
+        };
+
+        int satisfiedCount = 0;
+        boolean allFlagsCorrect = true;
+        for(int[] dir : directions){
+            int r = row + dir[0];
+            int c = col + dir[1];
+
+            if(r>=0 && r<SIZE && c>=0 && c<SIZE){
+                Square neighbor = squares[r][c];
+                if(neighbor.isRevealed() && neighbor.hasMine()){
+                    satisfiedCount++;
+                }else if(neighbor.isFlagged()){
+                    satisfiedCount++;
+                    if(!neighbor.hasMine()){
+                        allFlagsCorrect = false;
+                    }
+                }
+            }
+        }
+        if(satisfiedCount != center.getAdjacentMines()){
+            return;
+        }
+        
+        for(int[] dir : directions){
+            int r = row + dir[0];
+            int c = col + dir[1];
+
+            if(r>=0 && r<SIZE && c>=0 && c<SIZE){
+                Square neighbor = squares[r][c];
+                if(!neighbor.isFlagged() && !neighbor.isRevealed()){
+                    reveal(r, c);
+                }
+            }
+        }
+
+        if(!allFlagsCorrect){
+            System.out.println("Invalid chording! The piece is captured.");
+            center.setPiece(null);
+        }
+    }
 }

@@ -68,12 +68,21 @@ public class Game {
             return false;
         }
         
+        boolean wasRevealed = board.getSquare(toRow, toCol).isRevealed();
+
         toSquare.setPiece(piece);
         fromSquare.setPiece(null);
         piece.setPosition(toRow, toCol);
         board.reveal(toRow, toCol);
         piece.setHasMoved(true);
         checkPromotion(piece, toRow, toCol);
+
+        if(!wasRevealed && toSquare.hasMine()){
+            System.out.println("Mine triggered and the piece has been removed.");
+            toSquare.setPiece(null);
+        }else{
+            board.tryChording(toRow, toCol);
+        }
 
         // int oldEnPassantRow = enPassantRow;
         // int oldEnPassantCol = enPassantCol;
