@@ -48,6 +48,11 @@ public class Main {
                 game.movePiece(fr, fc, tr, tc);
             }
             board.printSideBySide();
+            
+            if(game.isGameOver()){
+                System.out.println("Game Over! " + game.getWinner() + "wins!");
+                break;
+            }
         }
     }
 }

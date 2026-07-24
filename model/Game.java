@@ -15,11 +15,17 @@ public class Game {
     private String currentTurn;
     private int enPassantRow = -1;
     private int enPassantCol = -1;
+    private boolean gameOver = false;
+    private String winner = null;
 
     public Game(Board board){
         this.board = board;
         this.currentTurn = "white";
     }
+
+    public boolean isGameOver(){ return gameOver; }
+    public String getWinner(){ return winner; }
+
 
     public boolean movePiece(int fromRow, int fromCol, int toRow, int toCol){
         Square fromSquare = board.getSquare(fromRow, fromCol);
@@ -79,7 +85,14 @@ public class Game {
 
         if(!wasRevealed && toSquare.hasMine()){
             System.out.println("Mine triggered and the piece has been removed.");
+            boolean wasKing = piece instanceof King;
             toSquare.setPiece(null);
+
+            if(wasKing){
+                gameOver = true;
+                winner = currentTurn.equals("white") ? "black" : "white";
+                System.out.println("The King stepped on a mine! " + winner + "wins!");
+            }
         }else{
             board.tryChording(toRow, toCol);
         }
