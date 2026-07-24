@@ -18,6 +18,7 @@ public class Main {
         // System.out.println("White king in check: " + isInCheck);
         // System.out.println("Can castle kingside: " + board.canCastleKingside("white"));
         // System.out.println("Can castle queenside: " + board.canCastleQueenside("white"));
+        System.out.println("White is checkmated: " + board.isCheckmate("white"));
 
         Game game = new Game(board);
         board.printSideBySide();
@@ -50,7 +51,7 @@ public class Main {
             board.printSideBySide();
             
             if(game.isGameOver()){
-                System.out.println("Game Over! " + game.getWinner() + "wins!");
+                System.out.println("Game Over! " + game.getWinner() + " wins!");
                 break;
             }
         }

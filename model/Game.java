@@ -91,7 +91,7 @@ public class Game {
             if(wasKing){
                 gameOver = true;
                 winner = currentTurn.equals("white") ? "black" : "white";
-                System.out.println("The King stepped on a mine! " + winner + "wins!");
+                System.out.println("The King stepped on a mine! " + winner + " wins!");
             }
         }else{
             board.tryChording(toRow, toCol);
@@ -108,6 +108,12 @@ public class Game {
         }
 
         currentTurn = currentTurn.equals("white") ? "black" : "white";
+
+        if(board.isCheckmate(currentTurn)){
+            gameOver = true;
+            winner = currentTurn.equals("white") ? "black" : "white";
+            System.out.println("Checkmate! " + winner + " wins!");
+        }
         return true;
     }
 
@@ -148,6 +154,12 @@ public class Game {
         rookPiece.setHasMoved(true);
 
         currentTurn = currentTurn.equals("white") ? "black" : "white";
+
+        if(board.isCheckmate(currentTurn)){
+            gameOver = true;
+            winner = currentTurn.equals("white") ? "black" : "white";
+            System.out.println("Checkmate! " + winner + " wins!");
+        }
         return true;
     }
 
@@ -186,6 +198,12 @@ public class Game {
         enPassantCol = -1;
 
         currentTurn = currentTurn.equals("white") ? "black" : "white";
+
+        if(board.isCheckmate(currentTurn)){
+            gameOver = true;
+            winner = currentTurn.equals("white") ? "black" : "white";
+            System.out.println("Checkmate! " + winner + " wins!");
+        }
         return true;
     }
 

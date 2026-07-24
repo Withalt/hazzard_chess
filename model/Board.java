@@ -332,4 +332,41 @@ public class Board {
             center.setPiece(null);
         }
     }
+
+    public boolean wouldEscapeCheck(int fromRow, int fromCol, int toRow, int toCol, String color){
+        Square fromSquare = squares[fromRow][fromCol];
+        Square toSquare = squares[toRow][toCol];
+        Piece movingPiece = fromSquare.getPiece();
+        Piece capturedPiece = toSquare.getPiece();
+
+        toSquare.setPiece(movingPiece);
+        fromSquare.setPiece(null);
+        movingPiece.setPosition(toRow, toCol);
+
+        boolean stillInCheck = isKingInCheck(color);
+
+        fromSquare.setPiece(movingPiece);
+        toSquare.setPiece(capturedPiece);
+        movingPiece.setPosition(fromRow, fromCol);
+
+        return !stillInCheck;
+    }
+
+    public boolean isCheckmate(String color){
+        if(!isKingInCheck(color)){
+            return false;
+        }
+
+        List<Piece> pieces = getAllPieces(color);
+        for(Piece piece : pieces){
+            List<int[]> moves = piece.getValidMoves(this);
+            for(int[] move : moves){
+                boolean canEscape = wouldEscapeCheck(piece.getRow(), piece.getCol(), move[0], move[1], color);
+                if (canEscape) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
